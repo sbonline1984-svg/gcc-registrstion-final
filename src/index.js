@@ -1,70 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-const App = () => {
-  return (
-    <div style={{ 
-      padding: '50px 20px', 
-      textAlign: 'center', 
-      backgroundColor: '#020617', 
-      minHeight: '100vh', 
-      color: 'white', 
-      fontFamily: 'sans-serif' 
-    }}>
-      {/* হেডাৰ অংশ */}
-      <h1 style={{ color: '#38bdf8', fontSize: '28px', marginBottom: '10px' }}>
-        গোলঘাট কমাৰ্চ কলেজ
-      </h1>
-      <p style={{ color: '#94a3b8', fontSize: '18px', marginBottom: '40px' }}>
-        ৰেজিষ্ট্ৰেচন কাৰ্ড প’ৰ্টেল (২০২৬)
-      </p>
-      
-      {/* ডাউনলোড কাৰ্ড */}
-      <div style={{ 
-        padding: '35px 25px', 
-        border: '1px solid #1e293b', 
-        borderRadius: '20px', 
-        backgroundColor: '#0f172a', 
-        display: 'inline-block',
-        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3)'
-      }}>
-        <h3 style={{ marginBottom: '20px', color: '#f8fafc' }}>প্ৰমাণপত্ৰ: ১১৫৯ খন</h3>
-        
-        <a 
-          href="/final-cards.pdf" 
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ 
-            padding: '15px 35px', 
-            backgroundColor: '#38bdf8', 
-            color: '#020617', 
-            textDecoration: 'none', 
-            fontWeight: 'bold', 
-            borderRadius: '10px', 
-            fontSize: '18px', 
-            display: 'inline-block',
-            transition: '0.3s'
-          }}
-        >
-          PDF ফাইলটো খোলক
-        </a>
+const RegistrationSearch = () => {
+  const [page, setPage] = useState('');
+  const [error, setError] = useState('');
 
-        <div style={{ marginTop: '25px', fontSize: '14px', color: '#64748b', textAlign: 'left', maxWidth: '350px' }}>
-          <p><b>সহায়িকা:</b></p>
-          <ul style={{ paddingLeft: '20px', lineHeight: '1.6' }}>
-            <li>বুটামটো টিপিলে PDF টো খোল খাব।</li>
-            <li>মোবাইলত PDF খোল খোৱাৰ পিছত <b>Search/Find</b> আইকনটো ব্যৱহাৰ কৰি নিজৰ নাম বা নম্বৰ বিচাৰিব।</li>
-            <li>ফাইলটোৰ আকাৰ ৬ এম বি, গতিকে নেটৱৰ্ক অনুযায়ী অলপ সময় ল'ব পাৰে।</li>
-          </ul>
-        </div>
+  const handleSearch = () => {
+    const pageNum = parseInt(page);
+    if (!pageNum || pageNum < 1 || pageNum > 1159) {
+      setError('অনুগ্ৰহ কৰি ১ ৰ পৰা ১১৫৯ ৰ ভিতৰত এটা পৃষ্ঠা নম্বৰ লিখক।');
+      return;
+    }
+    setError('');
+    // পৃষ্ঠা নম্বৰ অনুযায়ী PDF টো খোলিব
+    const url = `/final-cards.pdf#page=${pageNum}`;
+    window.open(url, '_blank');
+  };
+
+  return (
+    <div style={{ padding: '40px 20px', textAlign: 'center', backgroundColor: '#020617', minHeight: '100vh', color: 'white', fontFamily: 'sans-serif' }}>
+      <h1 style={{ color: '#38bdf8', fontSize: '24px' }}>গোলঘাট কমাৰ্চ কলেজ</h1>
+      <p style={{ color: '#94a3b8', marginBottom: '30px' }}>ৰেজিষ্ট্ৰেচন কাৰ্ড প’ৰ্টেল (২০২৬)</p>
+
+      <div style={{ backgroundColor: '#0f172a', padding: '30px', borderRadius: '15px', maxWidth: '400px', margin: '0 auto', border: '1px solid #1e293b', boxShadow: '0 10px 20px rgba(0,0,0,0.5)' }}>
+        <p style={{ marginBottom: '15px', fontSize: '15px' }}>আপোনাৰ <b>পৃষ্ঠা নম্বৰ (Page Number)</b> লিখক:</p>
+        
+        <input 
+          type="number" 
+          placeholder="যেনে: 45" 
+          value={page}
+          onChange={(e) => setPage(e.target.value)}
+          style={{ padding: '15px', width: '85%', borderRadius: '10px', border: '2px solid #334155', backgroundColor: '#020617', color: 'white', marginBottom: '15px', fontSize: '18px', textAlign: 'center' }}
+        />
+        
+        <button 
+          onClick={handleSearch}
+          style={{ padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#38bdf8', color: '#020617', fontWeight: 'bold', cursor: 'pointer', width: '100%', fontSize: '16px' }}
+        >
+          কাৰ্ডখন বিচাৰক (Search)
+        </button>
+
+        {error && <p style={{ marginTop: '15px', color: '#ef4444', fontSize: '13px' }}>{error}</p>}
+      </div>
+
+      <div style={{ marginTop: '40px', padding: '20px', color: '#64748b', fontSize: '13px', backgroundColor: '#0f172a', borderRadius: '10px', display: 'inline-block', textAlign: 'left', maxWidth: '400px' }}>
+          <p style={{fontWeight: 'bold', color: '#94a3b8'}}>কেনেকৈ বিচাৰিব?</p>
+          <ol style={{ paddingLeft: '20px' }}>
+            <li>প্ৰথমে লিষ্টৰ পৰা আপোনাৰ পৃষ্ঠা নম্বৰটো জানি লওক।</li>
+            <li>উপৰৰ বক্সত সেই নম্বৰটো লিখি Search টিপক।</li>
+            <li>পোনপটীয়াকৈ সেই পৃষ্ঠাখন খোল খাব।</li>
+          </ol>
+          <p style={{marginTop: '10px'}}>গোটেই ফাইলটো একেলগে খুলিবলৈ <a href="/final-cards.pdf" target="_blank" style={{color: '#38bdf8'}}>ইয়াত ক্লিক কৰক</a>।</p>
       </div>
       
-      <p style={{ marginTop: '50px', fontSize: '12px', color: '#334155' }}>
-        Developed for Golaghat Commerce College
-      </p>
+      <p style={{ marginTop: '50px', fontSize: '11px', color: '#334155' }}>Admin Support: GCC Office</p>
     </div>
   );
 };
 
 const root = createRoot(document.getElementById('root'));
-root.render(<App />);
+root.render(<RegistrationSearch />);
