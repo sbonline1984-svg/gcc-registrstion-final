@@ -1,20 +1,32 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-const RegistrationSearch = () => {
-  const [page, setPage] = useState('');
+const RegistrationPortal = () => {
+  const [regNo, setRegNo] = useState('');
   const [error, setError] = useState('');
 
+  // ইয়াৰ তলত আপুনি কলেজৰ ৰেজিষ্ট্ৰেচন নম্বৰৰ নিৰ্দিষ্ট ফৰ্মেটটো দিব পাৰে
+  // ধৰি লওক ৰেজিষ্ট্ৰেচন নম্বৰটো ১০ টা অংকৰ হ'ব লাগে
+  const REG_LENGTH = 10; 
+
   const handleSearch = () => {
-    const pageNum = parseInt(page);
-    if (!pageNum || pageNum < 1 || pageNum > 1159) {
-      setError('অনুগ্ৰহ কৰি ১ ৰ পৰা ১১৫৯ ৰ ভিতৰত এটা পৃষ্ঠা নম্বৰ লিখক।');
+    // ১. খালী আছে নেকি চেক কৰিব
+    if (!regNo) {
+      setError('অনুগ্ৰহ কৰি ৰেজিষ্ট্ৰেচন নম্বৰটো লিখক।');
       return;
     }
+
+    // ২. সম্পূৰ্ণ নম্বৰটো লিখিছে নে নাই চেক কৰিব (ধৰি লওক ১০ টা অংক)
+    // যদি আপোনাৰ কলেজৰ নম্বৰবোৰৰ দৈৰ্ঘ্য বেলেগ, তেন্তে '10' ৰ ঠাইত সেইটো লিখক
+    if (regNo.length < REG_LENGTH) {
+      setError(`অনুগ্ৰহ কৰি সম্পূৰ্ণ ${REG_LENGTH} টা অংকৰ ৰেজিষ্ট্ৰেচন নম্বৰটো লিখক।`);
+      return;
+    }
+
     setError('');
-    // পৃষ্ঠা নম্বৰ অনুযায়ী PDF টো খোলিব
-    const url = `/final-cards.pdf#page=${pageNum}`;
-    window.open(url, '_blank');
+    // সকলো ঠিকে থাকিলে PDF টো খোল খাব
+    // মনত ৰাখিব: PDF টো খোল খোৱাৰ পিছত ছাত্ৰজনে পুনৰ তাত চাৰ্চ কৰিব লাগিব
+    window.open('/final-cards.pdf', '_blank');
   };
 
   return (
@@ -23,40 +35,60 @@ const RegistrationSearch = () => {
       <p style={{ color: '#94a3b8', marginBottom: '30px' }}>ৰেজিষ্ট্ৰেচন কাৰ্ড প’ৰ্টেল (২০২৬)</p>
 
       <div style={{ backgroundColor: '#0f172a', padding: '30px', borderRadius: '15px', maxWidth: '400px', margin: '0 auto', border: '1px solid #1e293b', boxShadow: '0 10px 20px rgba(0,0,0,0.5)' }}>
-        <p style={{ marginBottom: '15px', fontSize: '15px' }}>আপোনাৰ <b>পৃষ্ঠা নম্বৰ (Page Number)</b> লিখক:</p>
+        <p style={{ marginBottom: '15px', fontSize: '15px' }}>আপোনাৰ <b>সম্পূৰ্ণ ৰেজিষ্ট্ৰেচন নম্বৰ</b> লিখক:</p>
         
         <input 
-          type="number" 
-          placeholder="যেনে: 45" 
-          value={page}
-          onChange={(e) => setPage(e.target.value)}
-          style={{ padding: '15px', width: '85%', borderRadius: '10px', border: '2px solid #334155', backgroundColor: '#020617', color: 'white', marginBottom: '15px', fontSize: '18px', textAlign: 'center' }}
+          type="text" 
+          placeholder="Enter Registration No." 
+          value={regNo}
+          onChange={(e) => setRegNo(e.target.value)}
+          style={{ 
+            padding: '15px', 
+            width: '85%', 
+            borderRadius: '10px', 
+            border: error ? '2px solid #ef4444' : '2px solid #334155', 
+            backgroundColor: '#020617', 
+            color: 'white', 
+            marginBottom: '10px', 
+            fontSize: '18px', 
+            textAlign: 'center',
+            outline: 'none'
+          }}
         />
         
+        {error && <p style={{ color: '#ef4444', fontSize: '13px', marginBottom: '15px' }}>{error}</p>}
+
         <button 
           onClick={handleSearch}
-          style={{ padding: '15px', borderRadius: '10px', border: 'none', backgroundColor: '#38bdf8', color: '#020617', fontWeight: 'bold', cursor: 'pointer', width: '100%', fontSize: '16px' }}
+          style={{ 
+            padding: '15px', 
+            borderRadius: '10px', 
+            border: 'none', 
+            backgroundColor: regNo.length >= REG_LENGTH ? '#38bdf8' : '#64748b', 
+            color: '#020617', 
+            fontWeight: 'bold', 
+            cursor: regNo.length >= REG_LENGTH ? 'pointer' : 'not-allowed', 
+            width: '100%', 
+            fontSize: '16px',
+            transition: '0.3s'
+          }}
+          disabled={regNo.length < REG_LENGTH}
         >
-          কাৰ্ডখন বিচাৰক (Search)
+          কাৰ্ডখন বিচাৰক
         </button>
-
-        {error && <p style={{ marginTop: '15px', color: '#ef4444', fontSize: '13px' }}>{error}</p>}
       </div>
 
-      <div style={{ marginTop: '40px', padding: '20px', color: '#64748b', fontSize: '13px', backgroundColor: '#0f172a', borderRadius: '10px', display: 'inline-block', textAlign: 'left', maxWidth: '400px' }}>
-          <p style={{fontWeight: 'bold', color: '#94a3b8'}}>কেনেকৈ বিচাৰিব?</p>
-          <ol style={{ paddingLeft: '20px' }}>
-            <li>প্ৰথমে লিষ্টৰ পৰা আপোনাৰ পৃষ্ঠা নম্বৰটো জানি লওক।</li>
-            <li>উপৰৰ বক্সত সেই নম্বৰটো লিখি Search টিপক।</li>
-            <li>পোনপটীয়াকৈ সেই পৃষ্ঠাখন খোল খাব।</li>
-          </ol>
-          <p style={{marginTop: '10px'}}>গোটেই ফাইলটো একেলগে খুলিবলৈ <a href="/final-cards.pdf" target="_blank" style={{color: '#38bdf8'}}>ইয়াত ক্লিক কৰক</a>।</p>
+      <div style={{ marginTop: '40px', padding: '20px', color: '#64748b', fontSize: '13px', textAlign: 'left', maxWidth: '400px', margin: '40px auto', backgroundColor: '#0f172a', borderRadius: '10px' }}>
+        <p style={{fontWeight: 'bold'}}>কিদৰে ব্যৱহাৰ কৰিব?</p>
+        <ol style={{ paddingLeft: '20px' }}>
+          <li>ওপৰত আপোনাৰ সম্পূৰ্ণ ৰেজিষ্ট্ৰেচন নম্বৰটো টাইপ কৰক।</li>
+          <li>নম্বৰটো সম্পূৰ্ণ হ’লেহে বুটামটো নীলা হ’ব আৰু কাম কৰিব।</li>
+          <li>PDF টো খোল খোৱাৰ পিছত 🔍 আইকনটো ব্যৱহাৰ কৰি পুনৰ নিজৰ নম্বৰটো বিচাৰিব।</li>
+        </ol>
       </div>
-      
-      <p style={{ marginTop: '50px', fontSize: '11px', color: '#334155' }}>Admin Support: GCC Office</p>
     </div>
   );
 };
 
 const root = createRoot(document.getElementById('root'));
-root.render(<RegistrationSearch />);
+root.render(<RegistrationPortal />);
