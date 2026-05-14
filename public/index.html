@@ -1252,5 +1252,45 @@ window.onload = function() {
 };
 </script>
 
+</table>
+</div>
+
+<script>
+function searchData() {
+    let input = document.getElementById('searchInput').value.toUpperCase().trim();
+    let table = document.getElementById('myTable') || document.getElementById('registrationTable');
+    let tr = table.getElementsByTagName('tr');
+    let found = false;
+
+    if (input === "") {
+        table.style.display = "none";
+        return;
+    }
+
+    for (let i = 1; i < tr.length; i++) {
+        let td = tr[i].getElementsByTagName('td')[1]; 
+        if (td) {
+            let txtValue = (td.textContent || td.innerText).toUpperCase().trim();
+            if (txtValue === input) {
+                tr[i].style.display = "";
+                found = true;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+    if (found) {
+        table.style.display = "table";
+    } else {
+        table.style.display = "none";
+    }
+}
+
+window.onload = function() {
+    let table = document.getElementById('myTable') || document.getElementById('registrationTable');
+    if(table) table.style.display = "none";
+};
+</script>
 </body>
 </html>
