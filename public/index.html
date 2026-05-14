@@ -31,9 +31,9 @@
 </div>
 
 <script>
-    // পঞ্জীয়ন নম্বৰ আৰু পৃষ্ঠা নম্বৰৰ তালিকা
+    // পঞ্জীয়ন নম্বৰ আৰু PDF ৰ পৃষ্ঠা নম্বৰৰ তালিকা
     const registrationMapping = {
-  "2515000001": 1,
+         "2515000001": 1,
   "2515000002": 2,
   "2515000003": 3,
   "2515000004": 4,
@@ -1192,6 +1192,7 @@
   "2433115296": 1157,
   "2433115297": 1158,
   "2433115298": 1159
+ //
     };
 
     function searchRegistration() {
@@ -1200,7 +1201,7 @@
         const resultDiv = document.getElementById('result');
 
         if (page) {
-            // ফাইলটো একেই ফোল্ডাৰত 'final-cards.pdf' নামেৰে থাকিব লাগিব
+            // PDF ফাইলটো একেই ফোল্ডাৰত 'final-cards.pdf' নামেৰে থাকিব লাগিব
             const pdfUrl = `final-cards.pdf#page=${page}`;
             resultDiv.innerHTML = `
                 <div style="color: green; font-weight: bold;">পঞ্জীয়ন নম্বৰ পোৱা গৈছে!</div>
@@ -1211,86 +1212,7 @@
             resultDiv.innerHTML = `<p style="color: red;">দুঃখিত, এই পঞ্জীয়ন নম্বৰটো আমাৰ তালিকাত নাই।</p>`;
         }
     }
-<script>
-function searchData() {
-    let input = document.getElementById('searchInput').value.toUpperCase().trim();
-    let table = document.getElementById('registrationTable');
-    let tr = table.getElementsByTagName('tr');
-    let found = false;
-
-    // যদি একো লিখা নাই, তেন্তে টেবুলখন লুকুৱাই ৰাখিব
-    if (input === "") {
-        table.style.display = "none";
-        return;
-    }
-
-    for (let i = 1; i < tr.length; i++) {
-        let td = tr[i].getElementsByTagName('td')[1]; // Registration No. কলমটো
-        if (td) {
-            let txtValue = td.textContent || td.innerText;
-            // কেৱল সম্পূৰ্ণ নম্বৰটো মিলিলেহে দেখুৱাব (Partial match নহয়)
-            if (txtValue.toUpperCase() === input) {
-                tr[i].style.display = "";
-                found = true;
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
-    }
-
-    // যদি নম্বৰটো মিলিছে, টেবুলখন দেখুৱাব, নহ’লে লুকুৱাব
-    if (found) {
-        table.style.display = "table";
-    } else {
-        table.style.display = "none";
-    }
-}
-
-// পেজটো খুলিলে টেবুলখন যাতে প্ৰথমে দেখা নাযায় তাৰ বাবে
-window.onload = function() {
-    document.getElementById('registrationTable').style.display = "none";
-};
 </script>
 
-</table>
-</div>
-
-<script>
-function searchData() {
-    let input = document.getElementById('searchInput').value.toUpperCase().trim();
-    let table = document.getElementById('myTable') || document.getElementById('registrationTable');
-    let tr = table.getElementsByTagName('tr');
-    let found = false;
-
-    if (input === "") {
-        table.style.display = "none";
-        return;
-    }
-
-    for (let i = 1; i < tr.length; i++) {
-        let td = tr[i].getElementsByTagName('td')[1]; 
-        if (td) {
-            let txtValue = (td.textContent || td.innerText).toUpperCase().trim();
-            if (txtValue === input) {
-                tr[i].style.display = "";
-                found = true;
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
-    }
-
-    if (found) {
-        table.style.display = "table";
-    } else {
-        table.style.display = "none";
-    }
-}
-
-window.onload = function() {
-    let table = document.getElementById('myTable') || document.getElementById('registrationTable');
-    if(table) table.style.display = "none";
-};
-</script>
 </body>
 </html>
